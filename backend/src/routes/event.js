@@ -184,5 +184,44 @@ router.delete('/:id/register', authMiddleware, validateEventId, async (req, res)
     res.status(500).json({ error: err.message });
   }
 });
+// Edit winner
+router.put('/:id/winners/:winnerId', authMiddleware, validateEventId, isEventOwner, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    const winner = event.winners.id(req.params.winnerId);
+    if (!winner) return res.status(404).json({ error: 'Winner not found' });
+
+    const { studentName, department, eventName, position, achievementDate, photoUrl } = req.body;
+
+    Object.assign(winner, {
+      studentName, department, eventName, position, achievementDate, photoUrl
+    });
+
+    await event.save();
+    res.json({ message: 'Winner updated successfully', winner });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete winner
+router.delete('/:id/winners/:winnerId', authMiddleware, validateEventId, isEventOwner, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    const winner = event.winners.id(req.params.winnerId);
+    if (!winner) return res.status(404).json({ error: 'Winner not found' });
+
+    winner.deleteOne();
+    await event.save();
+
+    res.json({ message: 'Winner deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;

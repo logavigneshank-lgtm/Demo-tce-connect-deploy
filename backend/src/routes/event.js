@@ -52,6 +52,47 @@ router.get('/winners', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// Add winner (protected - event organizer only)
+router.post('/:id/winners', authMiddleware, validateEventId, isEventOwner, async (req, res) => {
+  try {
+    const {
+      studentName,
+      department,
+      eventName,
+      position,
+      achievementDate,
+      photoUrl
+    } = req.body;
+
+    if (!studentName || !department || !eventName ||
+        !['1st Place', '2nd Place', '3rd Place'].includes(position)) {
+      return res.status(400).json({ error: 'Invalid winner details' });
+    }
+
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    event.winners.push({
+      studentName,
+      department,
+      eventName,
+      position,
+      achievementDate,
+      photoUrl
+    });
+
+    await event.save();
+
+    res.status(201).json({
+      message: 'Winner added successfully',
+      winners: event.winners
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // Get single event by ID (public)
 router.get('/:id', validateEventId, async (req, res) => {

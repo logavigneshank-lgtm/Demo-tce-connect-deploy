@@ -37,6 +37,21 @@ router.post('/', authMiddleware, validateEvent, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+// Get all published winners
+router.get('/winners', async (req, res) => {
+  try {
+    const events = await Event.find({ 'winners.0': { $exists: true } });
+    const winners = events.flatMap(event =>
+      event.winners.map(winner => ({
+        ...winner.toObject(),
+        eventId: event._id
+      }))
+    );
+    res.json(winners);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // Get single event by ID (public)
 router.get('/:id', validateEventId, async (req, res) => {

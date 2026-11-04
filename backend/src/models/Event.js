@@ -16,6 +16,18 @@ const eventSchema = new mongoose.Schema({
   maxParticipants: { type: Number, default: 100 },
   organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  winners: [{
+  studentName: { type: String, required: true },
+  department: { type: String, required: true },
+  eventName: { type: String, required: true },
+  position: {
+    type: String,
+    enum: ['1st Place', '2nd Place', '3rd Place'],
+    required: true
+  },
+  achievementDate: { type: String },
+  photoUrl: { type: String, default: '' }
+}]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Event', eventSchema);

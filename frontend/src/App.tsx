@@ -12,6 +12,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import OrganizerDashboard from "./pages/OrganizerDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import WinnersDashboard from "./pages/WinnersDashboard";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -88,6 +89,10 @@ const App = () => (
           />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route
+  path="/admin/winners"
+  element={<WinnersDashboard mode="admin" />}
+/>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

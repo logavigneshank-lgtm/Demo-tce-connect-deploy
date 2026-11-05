@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar, Users, Plus, Edit, Trash2, BarChart3, Eye, Mail, User } from "lucide-react";
+import { Calendar, Users, Plus, Edit, Trash2, BarChart3, Eye, Mail, User, Trophy } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -649,7 +649,16 @@ export default function OrganizerDashboard() {
                         </span>
                       </div>
                     </div>
-                    <div className="flex gap-2 ml-4">
+                    <div className="flex flex-wrap gap-2 ml-4">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => navigate(`/organizer/events/${event._id}/winners`)}
+                        disabled={loading}
+                        title="Manage winners for this event"
+                      >
+                        <Trophy className="h-4 w-4 mr-1" /> Winners
+                      </Button>
                       <Button 
                         size="sm" 
                         onClick={() => openParticipantsList(event)}

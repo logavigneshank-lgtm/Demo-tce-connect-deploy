@@ -44,6 +44,8 @@ export default function WinnersDashboard({
   // Local state is only a preview fallback. Connect onAddWinner/onDeleteWinner
   // and pass winners from the backend for shared, permanent data.
   const [localWinners, setLocalWinners] = useState<Winner[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [selectedEventId, setSelectedEventId] = useState("");
   const winners = suppliedWinners ?? localWinners;
 
   const [studentName, setStudentName] = useState("");

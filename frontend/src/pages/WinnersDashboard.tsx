@@ -1,4 +1,4 @@
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import API_BASE_URL from "@/config/api";
 import { authenticatedFetch } from "@/lib/auth";
 
@@ -55,6 +55,38 @@ export default function WinnersDashboard({
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [message, setMessage] = useState("");
+  useEffect(() => {
+  const loadWinners = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/events/winners`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to load winners");
+      }
+
+      const data = await response.json();
+
+      const list = Array.isArray(data)
+        ? data
+        : data.winners ?? data.data ?? [];
+
+      setLocalWinners(
+        list.map((winner: any) => ({
+          ...winner,
+          id: winner.id ?? winner._id,
+        }))
+      );
+    } catch (error) {
+      console.error("Winner loading error:", error);
+    }
+  };
+
+  if (!suppliedWinners) {
+    loadWinners();
+  }
+}, [suppliedWinners]);
 
   const visibleWinners = useMemo(() => {
     const term = search.trim().toLowerCase();

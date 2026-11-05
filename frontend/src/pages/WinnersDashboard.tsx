@@ -1,4 +1,6 @@
 import { FormEvent, useMemo, useState } from "react";
+import API_BASE_URL from "@/config/api";
+import { authenticatedFetch } from "@/lib/auth";
 
 export type WinnerPosition = "1st Place" | "2nd Place" | "3rd Place";
 
